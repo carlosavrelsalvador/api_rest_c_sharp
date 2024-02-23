@@ -4,5 +4,6 @@ docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=VeryStr0ngP@ssw0rd" -p 1433:
 
 
 cli
+
 sudo docker exec -it sql "bash"
 
