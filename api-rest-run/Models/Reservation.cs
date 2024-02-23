@@ -21,5 +21,5 @@ public partial class Reservation
 
     public int? SlotId { get; set; }
 
-    public int? VehicleId { get; set; }
+    public int VehicleId { get; set; }
 }

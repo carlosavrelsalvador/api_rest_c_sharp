@@ -23,6 +23,10 @@ public partial class TestDbContext : DbContext
 
     public virtual DbSet<Vehicle> Vehicles { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("server=localhost;database=TestDB;user=SA;password=VeryStr0ngP@ssw0rd;TrustServerCertificate=true");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Inventory>(entity =>
@@ -42,10 +46,13 @@ public partial class TestDbContext : DbContext
 
         modelBuilder.Entity<Reservation>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("reservations");
+            entity.HasKey(e => e.VehicleId).HasName("reservations_pk");
 
+            entity.ToTable("reservations");
+
+            entity.Property(e => e.VehicleId)
+                .ValueGeneratedNever()
+                .HasColumnName("vehicle_id");
             entity.Property(e => e.CreatedAt)
                 .HasColumnType("datetime")
                 .HasColumnName("created_at");
@@ -70,15 +77,18 @@ public partial class TestDbContext : DbContext
             entity.Property(e => e.UpdatedAt)
                 .HasColumnType("datetime")
                 .HasColumnName("updated_at");
-            entity.Property(e => e.VehicleId).HasColumnName("vehicle_id");
         });
 
         modelBuilder.Entity<Slot>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("slots");
+            entity.HasKey(e => e.SlotNumber).HasName("slots_pk");
 
+            entity.ToTable("slots");
+
+            entity.Property(e => e.SlotNumber)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("slot_number");
             entity.Property(e => e.CreatedAt)
                 .HasColumnType("datetime")
                 .HasColumnName("created_at");
@@ -90,10 +100,6 @@ public partial class TestDbContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("free");
-            entity.Property(e => e.SlotNumber)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("slot_number");
             entity.Property(e => e.UpdatedAt)
                 .HasColumnType("datetime")
                 .HasColumnName("updated_at");
@@ -101,10 +107,14 @@ public partial class TestDbContext : DbContext
 
         modelBuilder.Entity<Vehicle>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("vehicles");
+            entity.HasKey(e => e.Plate).HasName("vehicles_pk");
 
+            entity.ToTable("vehicles");
+
+            entity.Property(e => e.Plate)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("plate");
             entity.Property(e => e.Brand)
                 .HasMaxLength(100)
                 .IsUnicode(false)
@@ -120,10 +130,6 @@ public partial class TestDbContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("name");
-            entity.Property(e => e.Plate)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("plate");
             entity.Property(e => e.TypeCar)
                 .HasMaxLength(100)
                 .IsUnicode(false)

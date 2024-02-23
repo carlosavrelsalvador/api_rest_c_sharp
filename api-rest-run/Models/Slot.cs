@@ -7,7 +7,7 @@ public partial class Slot
 {
     public string? Floor { get; set; }
 
-    public string? SlotNumber { get; set; }
+    public string SlotNumber { get; set; } = null!;
 
     public string? Free { get; set; }
 

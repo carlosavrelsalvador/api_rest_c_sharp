@@ -5,7 +5,7 @@ namespace api_rest_run.Models;
 
 public partial class Vehicle
 {
-    public string? Plate { get; set; }
+    public string Plate { get; set; } = null!;
 
     public string? Name { get; set; }
 
