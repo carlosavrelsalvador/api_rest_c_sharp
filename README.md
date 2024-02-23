@@ -7,3 +7,8 @@ cli
 
 sudo docker exec -it sql "bash"
 
+>> actualizar los script --force
+
+dotnet ef dbcontext scaffold "server=localhost;database=TestDB;user=SA;password=VeryStr0ngP@ssw0rd;TrustServerCertificate=true" Microsoft.EntityFrameworkCore.SqlServer -o Models --force
+
+
